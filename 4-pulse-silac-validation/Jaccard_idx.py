@@ -98,37 +98,4 @@ def calculate_jaccard_matrix(data, pvalue_threshold=0.05, return_dataframe=True)
     if return_dataframe:
         return pd.DataFrame(results)
     return results
-
-def jaccard_similarity_matrix(data):
-    """
-    Create a full similarity matrix (all vs all).
     
-    Parameters:
-    -----------
-    data : numpy array or pandas DataFrame
-        Binary matrix where rows are observations and columns are features
-    
-    Returns:
-    --------
-    DataFrame : Symmetric matrix of Jaccard similarities
-    """
-    if isinstance(data, pd.DataFrame):
-        obs_names = data.index.tolist()
-        matrix = data.values.astype(bool)
-    else:
-        matrix = np.array(data).astype(bool)
-        obs_names = list(range(len(matrix)))
-    
-    n_obs = len(matrix)
-    sim_matrix = np.zeros((n_obs, n_obs))
-    
-    for i in range(n_obs):
-        for j in range(i, n_obs):
-            if i == j:
-                sim_matrix[i, j] = 1.0
-            else:
-                sim = jaccard_similarity_binary(matrix[i], matrix[j])
-                sim_matrix[i, j] = sim
-                sim_matrix[j, i] = sim
-    
-    return pd.DataFrame(sim_matrix, index=obs_names, columns=obs_names)
